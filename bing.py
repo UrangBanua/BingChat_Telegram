@@ -1,18 +1,22 @@
 import asyncio
 import os
 import re
-
 import telebot
+
 from EdgeGPT import Chatbot, ConversationStyle
 from telebot.util import quick_markup
+from dotenv import load_dotenv
+load_dotenv()
 
-BOT_TOKEN = os.getenv('BOT_TOKEN')
-ALLOWED_USER_IDS = os.getenv('ALLOWED_USER_IDS').split(',')
-BOT_ID = os.getenv('BOT_ID', '')
-COOKIE_PATH = os.getenv('COOKIE_PATH', './cookie.json')
-GROUP_MODE = os.getenv('GROUP_MODE', 'False')
-PUBLIC_MODE = os.getenv('PUBLIC_MODE', 'False')
+# Define constants
+BOT_TOKEN: str = os.getenv('BOT_TOKEN')
+ALLOWED_USER_IDS: list = os.getenv('ALLOWED_USER_IDS').split(',')
+BOT_ID: str = os.getenv('BOT_ID', '')
+COOKIE_PATH: str = os.getenv('COOKIE_PATH', './cookie.bing.json')
+GROUP_MODE: bool = os.getenv('GROUP_MODE', 'False')
+PUBLIC_MODE: bool = os.getenv('PUBLIC_MODE', 'False')
 
+# Print configuration
 print("\033[1;33mThe startup is successful, the configuration is as follows : ")
 print("BOT_TOKEN: " + BOT_TOKEN)
 print("BOT_ID: " + BOT_ID)
@@ -22,23 +26,30 @@ print("COOKIE_PATH: " + COOKIE_PATH)
 print("GROUP_MODE: " + GROUP_MODE)
 print("PUBLIC_MODE: " + PUBLIC_MODE + '\033[1;33m')
 
+# Create a telebot instance
 bot = telebot.TeleBot(BOT_TOKEN)
+
+# Create a dictionary to store Chatbot instances
 EDGES = {}
 
+# Define the not allowed information
 not_allow_info = '⚠️You are not authorized to use this bot⚠️'
 
+# Create a markup for the telebot
 markup = quick_markup({
-    'Github': {'url': 'https://github.com/pininkara/BingChatBot'},
+    'Github': {'url': 'https://github.com/UrangBanua/BingChat_Telegram'},
 }, row_width=1)
 
+# Define the conversation style
 my_conversation_style = ConversationStyle.balanced
+
 
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     if is_allowed(message) or PUBLIC_MODE == "True" or message.chat.type == "group":
         bot.reply_to(
-            message, "Bing Chat Bot By pininkara~\n/help - Show help message\n/reset - Reset conversation\n/switch - "
+            message, "Bing Chat Bot By UrangBanua~\n/help - Show help message\n/reset - Reset conversation\n/switch - "
                      "Switch conversation style (creative,balanced,precise)\n", reply_markup=markup)
     else:
         bot.reply_to(message, not_allow_info)

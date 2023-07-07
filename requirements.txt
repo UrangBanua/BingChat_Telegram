@@ -3,3 +3,5 @@ EdgeGPT~=0.2.1
 pyTelegramBotAPI==4.10.0
 telebot~=0.0.5
 asyncio~=3.4.3
+python-dotenv
+telebot
